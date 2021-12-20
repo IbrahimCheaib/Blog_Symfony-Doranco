@@ -1,0 +1,33 @@
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+.footer {
+    position: sticky;
+    top: 91.5vh;
+    width: 100%;
+    padding: 20px 0;
+    background-color: black;
+}
+
+body {
+    position: relative;
+    min-height: min-content;
+}
+
+table {
+    background-color: rgba(0, 0, 0, 0.096);
+}
+
+/*/////////////////////////////// IMAGE /////////////////////////////////////*/
+
+.img-card-custom {
+    width: 18rem;
+    height: 200px;
+    object-fit: cover;
+}
+
+.img-custom {
+    height: 600px;
+    object-fit: cover;
+}

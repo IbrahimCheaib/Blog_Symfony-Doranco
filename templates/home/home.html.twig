@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+
+            <h1 class="col-12 text-center my-5">Tous les articles</h1>
+
+            {% for article in articles %}
+
+                <div class="col-md-3 my-3">
+                    <div class="card" style="width: 18rem; height: 25rem;">
+                        <img src="" class="card-img-top img-card-custom" alt="{{ article.subtitle | length > 30 ? article.subtitle|slice(0, 30) ~ '...' : article.subtitle }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title | length > 20 ? article.title | slice(0, 20) ~ '...' : article.title }}</h5>
+                            <h6 class="card-title">{{ article.subtitle | length > 30 ? article.subtitle | slice(0, 30) ~ '...' : article.subtitle }}</h6>
+                            <p class="card-text">{{ article.description | length > 50 ? article.description | slice(0, 50) ~ '...' : article.description }}</p>
+                            <a href="{{ path( 'show_article', {'id' : article.id} ) }}" class="btn btn-warning d-block mx-auto">Voir l'article</a>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}

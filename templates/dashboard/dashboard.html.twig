@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DashboardController !{% endblock %}
+
+{% block body %}
+
+    <section class="container">
+
+        <h1 class="text-muted text-center">Tableau de bord Administrateur</h1>
+
+        <hr>
+
+        <div  class="col-sm-12 col-lg-12 col-xl-12">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {% if label == 'success' %}
+                    <span class="alert-inner--icon"><i class="fe fe-thumbs-up"></i></span>
+                    {% else %}
+                    <span class="alert-inner--icon"><i class="fe fe-thumbs-down"></i></span>
+                    {% endif %}
+                    <span class="alert-inner--text"><strong>{{ label | title }} : </strong> {{ message | raw }}</span>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <h2 class="text-muted text-center">Tous les articles</h2>
+        {# //////////////////////////////////////////////////////////////////////////////////////////////////////////// #}
+        <a class="btn btn-dark mb-2" href="{{path('create_article')}}">Créer un article</a>
+        <a class="btn btn-dark mb-2" href="{{path('create_category')}}">Créer une catégorie</a>
+        {# //////////////////////////////////////////////////////////////////////////////////////////////////////////// #}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Sous-titre</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Illustration</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{article.id}}</td>
+                        <td title="{{article.title}}">
+                            {{article.title | length > 40 ? article.title|slice(0, 40) ~ '...' : article.title}}
+                        </td>
+                        <td title="{{article.subtitle}}">
+                            {{article.subtitle | length > 40 ? article.subtitle|slice(0, 40) ~ '...' : article.subtitle}}
+                        </td>
+                        <td title="{{article.description}}">
+                            {{article.description | length > 40 ? article.description|slice(0, 40) ~ '...' : article.description}}
+                        </td>
+                        <td><img style="width:100px;" src="{{article.picture}}" alt=""></td>
+                        <td>
+                            <a href="{{path('delete_article',{'id': article.id })}}" onclick="return confirm('Voulez-vous vraiment supprimer cet article ?')"><i class="fa fa-trash"></i></a> | <a href="{{path('edit_article',{'id': article.id })}}"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 col-xl-6">
+                <h2 class="text-muted text-center">Toutes les catégories</h2>
+
+                <table class="table mt-5">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{category.id}}</td>
+                            <td>{{category.name}}</td>
+                            <td>
+                                <a href="{{path('delete_category',{'id': category.id })}}" onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm-6 col-lg-6 col-xl-6">
+                <h2 class="text-muted text-center">Tous les utilisateurs</h2>
+
+                <table class="table my-5">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{user.id}}</td>
+                            <td>{{user.lastname}}</td>
+                            <td>{{user.firstname}}</td>
+                            <td>{{user.email}}</td>
+                            <td><a href="{{path('delete_user',{'id': user.id })}}" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')"><i class="fa fa-trash"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+
+{% endblock %}

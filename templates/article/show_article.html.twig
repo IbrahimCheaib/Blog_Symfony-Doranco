@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SingleArticleController!{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="col-10 my-4 mx-auto">
+
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title text-center mb-5">{{article.title}}</h1>
+                    <p class="h4 text-center mb-3 text-secondary">{{article.subtitle}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-center text-muted">Crée le : {{ article.createdAt | date('m/d/Y') }} | Par : </li>
+                </ul>
+                <img class="img-custom" src="" alt="{{ article.title }}">
+                <div class="card-body">
+                    <p class="card-text my-4 col-10 mx-auto">{{article.description}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
