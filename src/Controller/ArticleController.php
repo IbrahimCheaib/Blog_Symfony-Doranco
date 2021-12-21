@@ -10,7 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ArticleController extends AbstractController
 {
@@ -27,7 +29,7 @@ class ArticleController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function createArticle(Request $request): Response
+    public function createArticle(Request $request, SluggerInterface $slugger): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
@@ -47,10 +49,80 @@ class ArticleController extends AbstractController
             $article->setCreatedAt(new \DateTime());
 
             # Coder ici la logique pour uploader la photo
-            //
 
-            $this->entityManager->persist($article);
-            $this->entityManager->flush();
+
+            // on recupere le fichier du formulaire grace a getData(). cela nous retourne un objet de type UploadFile.
+
+            $file = $form->get('picture')->getData();
+
+            // dd($file);
+
+            // condition qui verifie si un fichier est present dans le formulaire
+
+            if($file) {
+
+                // Generer une contrainte d'upload. On declare un array avec deux valeurs de type string qui sont les MimeType autorises'.
+                // Vous retrouvez tous les MimeType existant sur internet (mozilla developper)
+               
+                // $allowedMimeType = ['image/jpeg', 'image/png'];  // extensions: jpeg, png ....
+
+
+                // la fonction native in_array() permet de comparer deux valeurs (2 arguments attendus)
+                //if(in_array($file->getMimeType(), $allowedMimeType)) {
+                    
+                    // nous allons construire le nouveau nom du fichier
+
+                    // on stocke dans une variable $originalFilename le nom du fichier.
+                    // on utilise encore une fonction native pathinfo()
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+ 
+                    #recuperation de l'extension pour pouvoir reconstruire le nom quelques lignes apres.
+                    // on utilise la concatenation pour ajouter un point '.' 
+                    $extension = '.' . $file->guessExtension();
+                    # Assainissement du nom grace au slugger fourni par symfony pour la construction du nouveau nom 
+                    // $safeFilename = $slugger->slug($article->getTitle()); 
+                    $safeFilename = $slugger->slug($originalFilename);
+
+                    // dump($safeFilename);
+                    #construction du nouveau nom 
+                    // uniqid() est une fonction native qui permet de generer un id unique.
+                    $newFilename = $safeFilename . '_' . uniqid() . $extension;
+
+                    // dd($newFilename);
+
+                    /*
+                        on utilise un try catch(){} lorsqu'on appelle une methode qui lance une erreur.
+                    
+                    */
+                    try {
+
+
+                        /* on appelle la methode move() de UploadFile pour pouvoir deplacer le fichier dans son dossier de destination.
+                             le dossier de destination a ete' parametre' dans service.yaml
+                        /!\ Attention:
+                                La methode move lance une erreur de type FileException.
+                                on attrape cette erreur dans le catch(FileException $exception)
+                        */
+                        $file->move($this->getParameter('uploads_dir'), $newFilename);
+
+                        // On set la nouvelle valeur (nom du fichier) de la propriete' picture de notre objet Article.
+                        $article->setPicture($newFilename);
+
+                    } catch (FileException $exception) {
+                        // code a executer si une erreur est attrapee'.
+                       
+                    }
+
+                // }
+                // // Si ce n'est pas le bon type de fichier uploade' alors on affiche un message et redirige.
+                // else {
+                //     $this->addFlash('warning', 'Les types de fichier autorises sont : .jpeg / .png');
+                //     return $this->redirectToRoute('create_article');
+                // }
+            }
+
+            $this->entityManager->persist($article);  // persister les donnes'
+            $this->entityManager->flush();   // cest pour vider pour le remplir avec un prochain article
 
             $this->addFlash('success','Article ajouter!');
 

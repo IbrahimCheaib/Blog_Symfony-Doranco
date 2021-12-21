@@ -11,7 +11,15 @@
             <h2 class="text-muted text-center">Ajouter un nouvel article</h2>
         </div>
         <div class="col-6 mx-auto mt-4">
-            {{form(form)}}
+
+            <!-- <form novalidate = 'novalidate'> --> 
+            {{ form(form, {'attr': {novalidate: 'novalidate'} } ) }}
+
+            {#
+    {{ form_start(form, {'attr': }) }} => <form >
+    {{ form_end(form) }} => </form>
+#}
+
         </div>
     </div>
 </div>
