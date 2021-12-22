@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Form\EditArticleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,16 @@ class DashboardController extends AbstractController
     {
         $articles = $this->entityManager->getRepository(Article::class)->findAll();
 
+        $categories = $this->entityManager->getRepository(Category::class)->findAll();
+        
+        
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
         return $this->render('dashboard/dashboard.html.twig',
             [
                 'articles' => $articles,
-                'users' => $users
+                'users' => $users,
+                'categories' => $categories
             ]
         );
     }

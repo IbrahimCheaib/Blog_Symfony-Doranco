@@ -22,6 +22,18 @@ class CategoryController extends AbstractController
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category)->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isValid()) {
+            $category = $form->getData();
+
+            $category->setAlias($slugger->slug($category->getName()));
+
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La categorie est bien creer');
+            return $this->redirectToRoute('dashboard');
+        }
+
         return $this->render('dashboard/form_category.html.twig', [
            'form' => $form->createView()
         ]);
