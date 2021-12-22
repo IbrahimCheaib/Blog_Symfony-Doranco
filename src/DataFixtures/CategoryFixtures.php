@@ -8,7 +8,14 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/*
+    Les Fixtures(notion) sont un jeu de donnees.
+    Elles servent a remplir la bdd juste apres la creation de la BDD,
+    pour pouvoir manipuler des donnees dans mon code. => des entites' 
 
+
+
+*/
 class CategoryFixtures extends Fixture
 {
     private SluggerInterface $slugger;

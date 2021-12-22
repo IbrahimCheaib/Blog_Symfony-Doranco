@@ -12,8 +12,13 @@
             {% for article in articles %}
 
                 <div class="col-md-3 my-3">
-                    <div class="card" style="width: 18rem; height: 25rem;">
+                    <div class="card" style="width: 18rem; height: 30rem;">
                         <img src="{{ asset('uploads/' ~ article.picture) }}" class="card-img-top img-card-custom" alt="{{ article.subtitle | length > 30 ? article.subtitle|slice(0, 30) ~ '...' : article.subtitle }}">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Categorie : {{ article.category.name }}</li> 
+                            {# {{ dump(article.category.name) }} #}
+                        </ul>
+
                         <div class="card-body">
                             <h5 class="card-title">{{ article.title | length > 20 ? article.title | slice(0, 20) ~ '...' : article.title }}</h5>
                             <h6 class="card-title">{{ article.subtitle | length > 30 ? article.subtitle | slice(0, 30) ~ '...' : article.subtitle }}</h6>
