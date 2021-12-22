@@ -40,6 +40,10 @@ class ArticleController extends AbstractController
 
             $article = $form->getData();
 
+            $article->setUser($this->getUser()); // avec setUser va modeliser ou paramettrer tous ce qui est dans get user
+
+            
+
             # Association de l'article au user : setOwner()
             //
 

@@ -19,6 +19,12 @@
                             {# {{ dump(article.category.name) }} #}
                         </ul>
 
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Auteur : {{ article.user.lastname ?? '' ~ ' ' ~ article.user.firstname ?? '' }}</li>
+                            {#} condition ternaire= le premier ? comme un if.... il va regarder ce qu'il se passe dans article user last name s'il est null il retourne une chaine de caractere vide {#}
+                            {# {{ dump(article.category.name) }} #}
+                        </ul>
+
                         <div class="card-body">
                             <h5 class="card-title">{{ article.title | length > 20 ? article.title | slice(0, 20) ~ '...' : article.title }}</h5>
                             <h6 class="card-title">{{ article.subtitle | length > 30 ? article.subtitle | slice(0, 30) ~ '...' : article.subtitle }}</h6>
