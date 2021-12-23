@@ -57,6 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $articles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="author")
+     */
+    private $commentaries;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Cela permet de preset certaines propriétés à l'instanciation d'un new User
@@ -64,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->setRoles(['ROLE_USER']);
         $this->articles = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +228,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($article->getUser() === $this) {
                 $article->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentary[]
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->removeElement($commentary)) {
+            // set the owning side to null (unless already changed)
+            if ($commentary->getAuthor() === $this) {
+                $commentary->setAuthor(null);
             }
         }
 
